@@ -49,25 +49,31 @@ function App() {
   // Audio pool for better performance and reliability
   const [audioPool] = useState(() => ({
     hit: Array.from({ length: 5 }, () => {
-      const audio = new Audio("/hit_effect.wav");
+      const audio = new Audio(`${import.meta.env.BASE_URL}hit_effect.wav`);
       audio.volume = 0.5;
       audio.preload = "auto";
       return audio;
     }),
     fail: Array.from({ length: 3 }, () => {
-      const audio = new Audio("/fail_buzz_effect.wav");
+      const audio = new Audio(
+        `${import.meta.env.BASE_URL}fail_buzz_effect.wav`
+      );
       audio.volume = 0.4;
       audio.preload = "auto";
       return audio;
     }),
     win: (() => {
-      const audio = new Audio("/win_chime_effect.wav");
+      const audio = new Audio(
+        `${import.meta.env.BASE_URL}win_chime_effect.wav`
+      );
       audio.volume = 0.6;
       audio.preload = "auto";
       return audio;
     })(),
     gameOver: (() => {
-      const audio = new Audio("/73581__benboncan__sad-trombone.wav");
+      const audio = new Audio(
+        `${import.meta.env.BASE_URL}73581__benboncan__sad-trombone.wav`
+      );
       audio.volume = 0.5;
       audio.preload = "auto";
       return audio;
