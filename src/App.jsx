@@ -48,10 +48,12 @@ function App() {
 
   // Audio pool for better performance and reliability
   const [audioPool] = useState(() => ({
-    hit: Array.from({ length: 5 }, () => {
+    hit: Array.from({ length: 8 }, () => {
       const audio = new Audio(`${import.meta.env.BASE_URL}hit_effect.wav`);
       audio.volume = 0.5;
       audio.preload = "auto";
+      // Prevent audio from looping and ensure it can overlap
+      audio.loop = false;
       return audio;
     }),
     fail: Array.from({ length: 3 }, () => {
@@ -60,6 +62,7 @@ function App() {
       );
       audio.volume = 0.4;
       audio.preload = "auto";
+      audio.loop = false;
       return audio;
     }),
     win: (() => {
@@ -68,6 +71,7 @@ function App() {
       );
       audio.volume = 0.6;
       audio.preload = "auto";
+      audio.loop = false;
       return audio;
     })(),
     gameOver: (() => {
@@ -76,6 +80,7 @@ function App() {
       );
       audio.volume = 0.5;
       audio.preload = "auto";
+      audio.loop = false;
       return audio;
     })(),
   }));
@@ -148,43 +153,46 @@ function App() {
     const timeScore = score;
     const totalProgress = clickScore + timeScore;
 
-    // Balanced progression phases - longer initial phases, smoother transitions
-    const easyPhase = Math.min(totalProgress / 400, 1); // 0-1 over first 400 points
-    const mediumPhase = Math.max(0, Math.min((totalProgress - 400) / 600, 1)); // 0-1 from 400-1000 points
-    const hardPhase = Math.max(0, Math.min((totalProgress - 1000) / 1000, 1)); // 0-1 from 1000-2000 points
+    // Updated progression phases with longer ranges
+    const easyPhase = Math.min(totalProgress / 5000, 1); // 0-1 over first 5000 points
+    const mediumPhase = Math.max(
+      0,
+      Math.min((totalProgress - 5000) / 10000, 1)
+    ); // 0-1 from 5000-15000 points
+    const hardPhase = Math.max(0, Math.min((totalProgress - 15000) / 10000, 1)); // 0-1 from 15000-25000 points
     const extremePhase = Math.max(
       0,
-      Math.min((totalProgress - 2000) / 1500, 1)
-    ); // 0-1 from 2000-3500 points
+      Math.min((totalProgress - 25000) / 10000, 1)
+    ); // 0-1 from 25000-35000 points
     const insanePhase = Math.max(
       0,
-      Math.min((totalProgress - 3500) / 44500, 1)
-    ); // 0-1 from 3500-48000 points
+      Math.min((totalProgress - 35000) / 13000, 1)
+    ); // 0-1 from 35000-48000 points
     const brutalPhase = Math.max(
       0,
       Math.min((totalProgress - 48000) / 82000, 1)
     ); // 0-1 from 48000-130000 points
     const impossiblePhase = Math.max(0, (totalProgress - 130000) / 100000); // Unlimited scaling beyond 130000
 
-    // More moderate delay reductions - challenging but not overwhelming
+    // Slightly more challenging delay reductions
     let baseDelay = 1200; // Start the same
-    baseDelay *= 1 - easyPhase * 0.35; // 35% reduction in easy phase
-    baseDelay *= 1 - mediumPhase * 0.45; // Additional 45% reduction in medium
-    baseDelay *= 1 - hardPhase * 0.35; // Additional 35% reduction in hard
-    baseDelay *= 1 - extremePhase * 0.25; // Additional 25% reduction in extreme
-    baseDelay *= 1 - Math.min(insanePhase, 1) * 0.15; // Additional 15% reduction in insane
-    baseDelay *= 1 - Math.min(brutalPhase, 1) * 0.2; // Additional 20% reduction in brutal phase (48k+)
-    baseDelay *= 1 - Math.min(impossiblePhase, 2) * 0.25; // Additional 25% reduction in impossible phase (130k+), scales up to 2x
+    baseDelay *= 1 - easyPhase * 0.4; // 40% reduction in easy phase (was 35%)
+    baseDelay *= 1 - mediumPhase * 0.5; // Additional 50% reduction in medium (was 45%)
+    baseDelay *= 1 - hardPhase * 0.4; // Additional 40% reduction in hard (was 35%)
+    baseDelay *= 1 - extremePhase * 0.3; // Additional 30% reduction in extreme (was 25%)
+    baseDelay *= 1 - Math.min(insanePhase, 1) * 0.2; // Additional 20% reduction in insane (was 15%)
+    baseDelay *= 1 - Math.min(brutalPhase, 1) * 0.25; // Additional 25% reduction in brutal phase (was 20%)
+    baseDelay *= 1 - Math.min(impossiblePhase, 2) * 0.3; // Additional 30% reduction in impossible phase (was 25%)
 
-    // Variable delay decreases more moderately
+    // Variable delay decreases slightly more aggressively
     let variableDelay = 1800;
-    variableDelay *= 1 - easyPhase * 0.3; // 30% reduction
-    variableDelay *= 1 - mediumPhase * 0.4; // 40% reduction
-    variableDelay *= 1 - hardPhase * 0.35; // 35% reduction
-    variableDelay *= 1 - extremePhase * 0.25; // 25% reduction
-    variableDelay *= 1 - Math.min(insanePhase, 1) * 0.2; // 20% reduction
-    variableDelay *= 1 - Math.min(brutalPhase, 1) * 0.25; // Additional 25% reduction in brutal
-    variableDelay *= 1 - Math.min(impossiblePhase, 1.5) * 0.3; // Additional 30% reduction in impossible, scales up to 1.5x
+    variableDelay *= 1 - easyPhase * 0.35; // 35% reduction (was 30%)
+    variableDelay *= 1 - mediumPhase * 0.45; // 45% reduction (was 40%)
+    variableDelay *= 1 - hardPhase * 0.4; // 40% reduction (was 35%)
+    variableDelay *= 1 - extremePhase * 0.3; // 30% reduction (was 25%)
+    variableDelay *= 1 - Math.min(insanePhase, 1) * 0.25; // 25% reduction (was 20%)
+    variableDelay *= 1 - Math.min(brutalPhase, 1) * 0.3; // Additional 30% reduction in brutal (was 25%)
+    variableDelay *= 1 - Math.min(impossiblePhase, 1.5) * 0.35; // Additional 35% reduction in impossible (was 30%)
 
     // Moderate randomness increase at higher levels
     const randomnessFactor = Math.min(
@@ -195,13 +203,13 @@ function App() {
     const finalDelay =
       (baseDelay + Math.random() * variableDelay) * randomFactor;
 
-    // More gradual minimum delay reduction with elite level adjustments
-    let minDelay = Math.max(120, 350 - totalProgress / 15); // Starts at 350ms, goes down to 120ms more gradually
+    // Slightly more aggressive minimum delay reduction
+    let minDelay = Math.max(110, 350 - totalProgress / 12); // Starts at 350ms, goes down to 110ms more quickly (was /15)
     if (totalProgress >= 48000) {
-      minDelay = Math.max(80, minDelay - (totalProgress - 48000) / 2000); // Further reduction at brutal level
+      minDelay = Math.max(70, minDelay - (totalProgress - 48000) / 1800); // Further reduction at brutal level (was /2000)
     }
     if (totalProgress >= 130000) {
-      minDelay = Math.max(50, minDelay - (totalProgress - 130000) / 5000); // Extreme reduction at impossible level
+      minDelay = Math.max(45, minDelay - (totalProgress - 130000) / 4500); // Extreme reduction at impossible level (was /5000)
     }
     const actualDelay = Math.max(minDelay, finalDelay);
 
@@ -300,9 +308,14 @@ function App() {
   const playHitSound = () => {
     if (isMuted) return;
     try {
+      // Simply use round-robin approach - always play a sound
       const audio = audioPool.hit[audioIndices.hit];
-      audio.currentTime = 0; // Reset to start
-      audio.play().catch(() => {}); // Silently handle errors
+
+      // Force reset and play immediately
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+
       setAudioIndices((prev) => ({
         ...prev,
         hit: (prev.hit + 1) % audioPool.hit.length,
@@ -315,9 +328,14 @@ function App() {
   const playFailSound = () => {
     if (isMuted) return;
     try {
+      // Simply use round-robin approach - always play a sound
       const audio = audioPool.fail[audioIndices.fail];
-      audio.currentTime = 0; // Reset to start
-      audio.play().catch(() => {}); // Silently handle errors
+
+      // Force reset and play immediately
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+
       setAudioIndices((prev) => ({
         ...prev,
         fail: (prev.fail + 1) % audioPool.fail.length,
@@ -423,7 +441,7 @@ function App() {
   const clickScore = clickCount * 75; // Match the balanced click scoring
   const totalProgress = clickScore + score;
 
-  // Determine difficulty level based on the balanced phase system with elite levels
+  // Determine difficulty level based on the updated phase system with elite levels
   let difficultyLevel = 1;
   let difficultyName = "Easy";
   let difficultyColor = "text-green-400";
@@ -441,32 +459,32 @@ function App() {
     difficultyLevel = 30 + Math.floor((totalProgress - 48000) / 4000); // 30-49 (Brutal)
     difficultyName = "BRUTAL";
     difficultyColor = "text-pink-500";
-  } else if (totalProgress >= 3500) {
-    // Insane phase: 3500-48k
+  } else if (totalProgress >= 35000) {
+    // Insane phase: 35k-48k
     difficultyLevel = Math.min(
-      20 + Math.floor((totalProgress - 3500) / 2500),
+      25 + Math.floor((totalProgress - 35000) / 650),
       29
-    ); // 20-29 (Insane)
+    ); // 25-29 (Insane)
     difficultyName = "INSANE";
     difficultyColor = "text-red-500";
-  } else if (totalProgress >= 2000) {
-    // Extreme phase: 2000-3500
-    difficultyLevel = 15 + Math.floor((totalProgress - 2000) / 150); // 15-19 (Extreme)
+  } else if (totalProgress >= 25000) {
+    // Extreme phase: 25000-35000
+    difficultyLevel = 20 + Math.floor((totalProgress - 25000) / 500); // 20-24 (Extreme)
     difficultyName = "Extreme";
     difficultyColor = "text-orange-500";
-  } else if (totalProgress >= 1000) {
-    // Hard phase: 1000-2000
-    difficultyLevel = 10 + Math.floor((totalProgress - 1000) / 100); // 10-14 (Hard)
+  } else if (totalProgress >= 15000) {
+    // Hard phase: 15000-25000
+    difficultyLevel = 15 + Math.floor((totalProgress - 15000) / 500); // 15-19 (Hard)
     difficultyName = "Hard";
     difficultyColor = "text-red-400";
-  } else if (totalProgress >= 400) {
-    // Medium phase: 400-1000
-    difficultyLevel = 5 + Math.floor((totalProgress - 400) / 60); // 5-9 (Medium)
+  } else if (totalProgress >= 5000) {
+    // Medium phase: 5000-15000
+    difficultyLevel = 10 + Math.floor((totalProgress - 5000) / 500); // 10-14 (Medium)
     difficultyName = "Medium";
     difficultyColor = "text-yellow-400";
   } else {
-    // Easy phase: 0-400
-    difficultyLevel = 1 + Math.floor(totalProgress / 50); // 1-8 (Easy)
+    // Easy phase: 0-5000
+    difficultyLevel = 1 + Math.floor(totalProgress / 250); // 1-19 (Easy)
     difficultyName = "Easy";
     difficultyColor = "text-green-400";
   }
@@ -729,4 +747,3 @@ function App() {
 }
 
 export default App;
-
