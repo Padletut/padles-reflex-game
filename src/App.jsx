@@ -500,7 +500,7 @@ function App() {
         <span className="text-xl">{isMuted ? "🔇" : "🔊"}</span>
       </button>
 
-      {/* Left Sidebar - Stats - Force positioned with inline styles */}
+      {/* Left Sidebar - Stats - DESKTOP ONLY */}
       <div
         style={{
           position: "absolute",
@@ -509,7 +509,7 @@ function App() {
           width: "20rem",
           zIndex: 10,
         }}
-        className="space-y-4"
+        className="desktop-only space-y-4"
       >
         <div className="enhanced-score-box rounded-lg stats-box">
           <h3 className="text-slate-400 text-sm font-semibold stats-header">
@@ -675,7 +675,7 @@ function App() {
         )}
       </div>
 
-      {/* Right Sidebar - High Score History */}
+      {/* Right Sidebar - High Score History - DESKTOP ONLY */}
       <div
         style={{
           position: "absolute",
@@ -685,6 +685,7 @@ function App() {
           zIndex: 10,
           maxHeight: "calc(100vh - 200px)",
         }}
+        className="desktop-only"
       >
         <div className="enhanced-score-box rounded-lg stats-box">
           <div className="stats-header">
@@ -739,6 +740,113 @@ function App() {
                 No games played yet
               </p>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* MOBILE LAYOUT (<1050px) - Simple responsive content */}
+      <div className="mobile-only">
+        {/* Mobile Stats - Above Game Content */}
+        <div className="mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            {/* Performance Stats */}
+            <div className="enhanced-score-box rounded-lg stats-box">
+              <h3 className="text-slate-400 text-sm font-semibold stats-header">
+                Performance
+              </h3>
+              <div className="stats-content">
+                <div className="flex justify-between stats-row">
+                  <span className="text-slate-300 text-sm">Clicks:</span>
+                  <span className="text-white font-semibold">{clickCount}</span>
+                </div>
+                <div className="flex justify-between stats-row">
+                  <span className="text-slate-300 text-sm">Avg Time:</span>
+                  <span className="text-cyan-400 font-semibold">{avgTime}ms</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Reaction Times */}
+            <div className="enhanced-score-box rounded-lg stats-box">
+              <h3 className="text-slate-400 text-sm font-semibold stats-header">
+                Reaction Times
+              </h3>
+              <div className="stats-content">
+                {lowestReactionTime !== null ? (
+                  <>
+                    <div className="flex justify-between stats-row">
+                      <span className="text-slate-300 text-sm">Best:</span>
+                      <span className="text-emerald-400 font-semibold">
+                        {lowestReactionTime.toFixed(0)}ms
+                      </span>
+                    </div>
+                    <div className="flex justify-between stats-row">
+                      <span className="text-slate-300 text-sm">Worst:</span>
+                      <span className="text-red-400 font-semibold">
+                        {highestReactionTime?.toFixed(0)}ms
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-slate-400 text-xs text-center" style={{ padding: "24px 0" }}>
+                    Start playing to see stats
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile High Score - Below Game Content */}
+        <div className="mt-6">
+          <div className="enhanced-score-box rounded-lg stats-box">
+            <div className="stats-header">
+              <h3 className="text-slate-400 text-sm font-semibold">
+                High Score History
+              </h3>
+              <div className="text-emerald-400 font-bold text-lg mt-1">
+                Best: {highScore} pts
+              </div>
+            </div>
+            <div className="stats-content" style={{ maxHeight: "300px", overflowY: "auto" }}>
+              {gameHistory.length > 0 ? (
+                <div className="space-y-2">
+                  {gameHistory.slice(0, 5).map((game, index) => (
+                    <div
+                      key={index}
+                      className={`rounded text-xs game-history-entry ${
+                        index === 0
+                          ? "enhanced-history-entry-latest enhanced-history-entry"
+                          : "enhanced-history-entry"
+                      }`}
+                    >
+                      <div className="flex justify-between items-center score-line">
+                        <span className="text-yellow-400 font-semibold">
+                          {game.score} pts
+                        </span>
+                        {index === 0 && (
+                          <span className="text-emerald-400 text-xs">Latest</span>
+                        )}
+                      </div>
+                      <div className="flex justify-between text-slate-300 stats-line">
+                        <span>Clicks: {game.clickCount}</span>
+                        <span className="text-cyan-400">
+                          {game.avgReactionTime}ms avg
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-slate-400 text-xs">
+                        <span>{game.date}</span>
+                        <span>{game.time}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-slate-400 text-xs text-center" style={{ padding: "24px 0" }}>
+                  No games played yet
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

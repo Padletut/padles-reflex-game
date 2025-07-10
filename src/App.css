@@ -467,7 +467,27 @@
   margin-bottom: 8px !important;
 }
 
-/* Responsive adjustments */
+/* Responsive Layout Controls */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Mobile Layout - screens smaller than 1050px */
+@media (max-width: 1049px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .mobile-only {
+    display: block !important;
+  }
+}
+
+/* Game Cell Responsive adjustments */
 @media (max-width: 768px) {
   .game-cell {
     width: 100px;
