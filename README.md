@@ -2,6 +2,8 @@
 
 A fast-paced, challenging reflex game built with React and Vite. Test your reaction speed with progressively increasing difficulty levels!
 
+🎮 **[Play Live Demo](https://padletut.github.io/padles-reflex-game)** 🎮
+
 ![Game Preview](https://img.shields.io/badge/Status-Complete-brightgreen) ![React](https://img.shields.io/badge/React-18.0+-61DAFB?logo=react) ![Vite](https://img.shields.io/badge/Vite-5.0+-646CFF?logo=vite) ![TailwindCSS](https://img.shields.io/badge/Tailwind-3.0+-06B6D4?logo=tailwindcss)
 
 ## 🚀 Features
@@ -118,7 +120,9 @@ npm run preview
 
 ## 🎨 UI/UX Features
 
-- **Responsive Design**: Works on desktop and mobile devices
+- **Fully Responsive**: Adapts seamlessly from desktop (1050px+) to mobile devices
+- **Desktop Layout**: Sidebar stats and history for larger screens
+- **Mobile Layout**: Stacked design optimized for touch devices
 - **Modern Aesthetics**: Glassmorphism effects and smooth gradients
 - **Intuitive Layout**: Clear information hierarchy and visual feedback
 - **Accessibility**: High contrast colors and clear typography
