@@ -761,7 +761,9 @@ function App() {
                 </div>
                 <div className="flex justify-between stats-row">
                   <span className="text-slate-300 text-sm">Avg Time:</span>
-                  <span className="text-cyan-400 font-semibold">{avgTime}ms</span>
+                  <span className="text-cyan-400 font-semibold">
+                    {avgTime}ms
+                  </span>
                 </div>
               </div>
             </div>
@@ -788,7 +790,10 @@ function App() {
                     </div>
                   </>
                 ) : (
-                  <p className="text-slate-400 text-xs text-center" style={{ padding: "24px 0" }}>
+                  <p
+                    className="text-slate-400 text-xs text-center"
+                    style={{ padding: "24px 0" }}
+                  >
                     Start playing to see stats
                   </p>
                 )}
@@ -808,7 +813,10 @@ function App() {
                 Best: {highScore} pts
               </div>
             </div>
-            <div className="stats-content" style={{ maxHeight: "300px", overflowY: "auto" }}>
+            <div
+              className="stats-content"
+              style={{ maxHeight: "300px", overflowY: "auto" }}
+            >
               {gameHistory.length > 0 ? (
                 <div className="space-y-2">
                   {gameHistory.slice(0, 5).map((game, index) => (
@@ -825,7 +833,9 @@ function App() {
                           {game.score} pts
                         </span>
                         {index === 0 && (
-                          <span className="text-emerald-400 text-xs">Latest</span>
+                          <span className="text-emerald-400 text-xs">
+                            Latest
+                          </span>
                         )}
                       </div>
                       <div className="flex justify-between text-slate-300 stats-line">
@@ -842,7 +852,10 @@ function App() {
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-400 text-xs text-center" style={{ padding: "24px 0" }}>
+                <p
+                  className="text-slate-400 text-xs text-center"
+                  style={{ padding: "24px 0" }}
+                >
                   No games played yet
                 </p>
               )}
